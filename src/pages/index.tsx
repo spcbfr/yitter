@@ -1,4 +1,4 @@
-import { SignIn, SignInButton } from "@clerk/nextjs";
+import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
+  const user = useUser()
   return (
     <>
       <Head>
@@ -17,8 +17,10 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <SignInButton/>
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+        <div className=" text-white p-3 ">
+          {!user.isSignedIn && <SignInButton/>}
+          {!!user.isSignedIn && <SignOutButton/>}
+        </div>
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
           </h1>
